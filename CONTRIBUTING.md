@@ -16,7 +16,9 @@
 
 The title of a Bug or Enhancement should clearly indicate what is broken or desired. Use the description to
 explain possible solutions or add details and (especially for Enhancemnts) explain *how* or *why* the issue is
-broken or desired.
+broken or desired. Please see [ISSUE_TEMPLATE.md](https://github.com/ciscospark/spark-js-sdk/blob/master/.github/ISSUE_TEMPLATE.MD) that outlines what we are looking for.
+
+**If providing snippets of code**, use [Markdown code blocks](https://help.github.com/articles/markdown-basics/#multiple-lines).
 
 #### Grammar
 
@@ -26,6 +28,11 @@ blinking text"** a bug or a feature request?
 
 - Enhancements: The title should be an imperative statement of how things should be. **"Add support for blinking text"**
 - Bugs: The title should be a declarative statement of how things are. **"Text does not blink"**
+
+#### Logs
+
+Please provide sufficient logging around the issue which you are reporting as this will help with our investigation.
+**DO NOT** include access tokens or other sensitive information. If you need to supply logs with sensitive information, supply them to developer support rather than posting them here; even when sending logs to developer support, **DO NOT** include access tokens.
 
 ## Contributing Code
 
@@ -67,49 +74,32 @@ Build the SDK:
 npm run build
 ```
 
-> There used to be a means of building individual packages, but they now build quickly enough that there's no need.
-
 ### Running Tests
 
-#### Run All Tests
+`npm test` is the entrypoint to our test runner, but its not practical to use without parameters; the full suite would take over two hours to run and cross talk would probably cause tests to break each other.
 
-```bash
-npm test
-```
+> Get the full test-runner docs via `npm test -- --help`.
 
-#### Run Unit Tests
+A local development flow might look like
 
-Handy during early plugin development when you can write a bunch of unit tests.
+1. Edit source code in `MYPACKAGE`.
+2. Use `npm run build` to build all packages .
+3. Use `npm test -- --package MYPACKAGE --node` to run the tests for just that package only in nodejs (Usually, we don't need to test both in node and the browser during development).
+4. Repeats steps 1-3 until the tests pass.
 
-```bash
-npm test -- --package PACKAGENAME --unit
-```
+`npm run build` is a bit tedious when making lots of changes, so instead, we can use `npm run distsrc` to point each package's `main` entry at the raw src and let `babel-node` compile on the fly.
 
-### Run unit tests in watch mode
+1. At the start of development, run `npm run distsrc` once.
+2. Edit source code in `MYPACKAGE`.
+3. Use `npm test -- --package MYPACKAGE --node` to run the tests for just that package only in nodejs.
+4. Repeat steps 2-3 until the tests pass. 
+5. Run `npm run srcdist` to restore the package.jsons to avoid committing those changes. 
 
-OK, this one's a handful and requires a global package, but there were too many possible variants to
-hardcode it any where.
+You can use the `--unit`, `--integration`, `--automation`, and `--documentation` switches to control what types of tests you run and `--node` and `--browser` to control which environments your tests run in.
 
-```bash
-npm install -g nodemon
-nodemon -w packages/PACKAGENAME/src -w packages/PACKAGENAME/test -x "npm test -- --package PACKAGENAME --node"
-```
+`--browser --karma-debug` will run the browser tests with `{singleRun: false}`, thus allowing automatic rerunning everytime you save a file (though, karma does eventually get confused and you need to interrupt and restart the command).
 
-#### Run Node.js Tests
-
-Usually faster, and can build on the fly, thus no need to rebuild everything between test runs
-
-```bash
-npm test -- --package PACKAGENAME --node
-```
-
-#### Run Browser Tests
-
-Keeps the browser open so that you can reload set break points and reload the page
-
-```bash
-npm test -- --package PACKAGENAME --browser --karma-debug
-```
+> See [SCRIPTS.md](SCRIPTS.md) for more details on scripts in the repository.
 
 ### Git Commit Guidelines
 
@@ -210,7 +200,7 @@ git checkout feature
 git rebase master
 ```
 
-Finally, open a Pull Request with your changes. Be sure to mention the issues this request addresses in the body of the request. Once your request is opened, a developer will review, comment, and, when approved, merge your changes!
+Finally, open a [new Pull Request](https://github.com/ciscospark/spark-js-sdk/compare) with your changes. Be sure to mention the issues this request addresses in the body of the request. Once your request is opened, a developer will review, comment, and, when approved, merge your changes!
 
 ## Updating the Documentation
 

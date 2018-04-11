@@ -1,5 +1,7 @@
 # spark-js-sdk
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/ciscospark/spark-js-sdk.svg)](https://greenkeeper.io/)
+
 [![npm](https://img.shields.io/npm/v/ciscospark.svg?maxAge=86400)](https://www.npmjs.com/package/ciscospark)
 [![license](https://img.shields.io/github/license/ciscospark/spark-js-sdk.svg)](https://github.com/ciscospark/spark-js-sdk/blob/master/LICENSE)
 [![Build status](https://ci.appveyor.com/api/projects/status/tb1i5vdhy5e3xsgv/branch/master?svg=true)](https://ci.appveyor.com/project/ianwremmel/spark-js-sdk/branch/master)
@@ -10,10 +12,9 @@ This is a monorepo containing all officially maintained Cisco Spark JavaScript S
 
 [ciscospark](/packages/node_modules/ciscospark) is a collection of node modules targeting our [external APIs](https://developers.ciscospark.com).
 
-## Table of Contents
-
 - [Install](#install)
 - [Usage](#usage)
+- [Samples](#samples)
 - [Contribute](#contribute)
 - [License](#license)
 
@@ -84,22 +85,28 @@ the user authentication flow for you. See the guide on the
 
 ## Samples
 
-Sample code can be found in [packages/node_modules/*](./packages/node_modules). You can run them yourself with the following commands:
+Sample code can be found in [packages/node_modules/samples](./packages/node_modules/samples). You can run them yourself with the following commands:
 
-> Note: this installs all of the sdk's tooling dependencies, so you'll need libgcrypt and (possibly) graphicsmagick. On a mac, you can install these with `brew install graphicsmagick libgrcrypt`.
+> Note: this installs all of the SDK's tooling dependencies, so you'll need `libgcrypt` and (possibly) `graphicsmagick`. On a mac, you can install these with `brew install graphicsmagick libgrcrypt`.
 
 ```bash
 git clone git@github.com:ciscospark/spark-js-sdk.git
 cd spark-js-sdk
 npm install
-npm run serve:samples
+npm run samples:serve
 ```
 
-You'll be able to load the samples by visiting `https://localhost:8000/packages/node_modules/<PACKAGE NAME>`.
+You'll be able to load the samples by visiting `https://localhost:8000/packages/node_modules/samples/<PACKAGE NAME>`.
 
 ### Available Samples
 
-- Single Party Calling: [local app](`https://localhost:8000/packages/node_modules/sample-browser-single-party-call`) | [code](./packages/node_modules/sample-browser-single-party-call)
+| Sample | App Link | Source |
+| ------ | -------- | ------ |
+| Implicit Grant Flow | [local app](https://localhost:8000/packages/node_modules/samples/browser-auth-implicit) | [code](./packages/node_modules/samples/browser-auth-implicit) |
+| Single Party Calling | [local app](https://localhost:8000/packages/node_modules/samples/browser-single-party-call) | [code](./packages/node_modules/samples/browser-single-party-call) |
+| Single Party Calling with Mute | [local app](https://localhost:8000/packages/node_modules/samples/browser-single-party-call-with-mute) | [code](./packages/node_modules/samples/browser-single-party-call-with-mute) |
+| Multi Party Calling | [local app](https://localhost:8000/packages/node_modules/samples/browser-multi-party-call) | [code](./packages/node_modules/samples/browser-multi-party-call) |
+| Call with Content Sharing | [local app](https://localhost:8000/packages/node_modules/samples/browser-call-with-screenshare) | [code](./packages/node_modules/samples/browser-call-with-screenshare) |
 
 ## Contribute
 
@@ -108,6 +115,6 @@ and submitting pull requests for suggested changes.
 
 ## License
 
-&copy; 2016-2017 Cisco Systems, Inc. and/or its affiliates. All Rights Reserved.
+© 2016-2018 Cisco and/or its affiliates. All Rights Reserved.
 
 See [LICENSE](LICENSE) for details.

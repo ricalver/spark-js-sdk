@@ -74,6 +74,9 @@ def generateDockerEnv = { ->
   if (env.ENABLE_VERBOSE_NETWORK_LOGGING != null) {
     dockerEnv+="ENABLE_VERBOSE_NETWORK_LOGGING=${env.ENABLE_VERBOSE_NETWORK_LOGGING}\n"
   }
+  if (env.GIT_COMMIT != null) {
+    dockerEnv+="GIT_COMMIT=${env.GIT_COMMIT}\n"
+  }
   if (env.HYDRA_SERVICE_URL != null) {
     dockerEnv+="HYDRA_SERVICE_URL=${env.HYDRA_SERVICE_URL}\n"
   }
@@ -204,7 +207,7 @@ ansiColor('xterm') {
                 currentBuild.description += 'Could not determine pusher <br />';
               }
 
-              sshagent(['30363169-a608-4f9b-8ecc-58b7fb87181b']) {
+              sshagent(['707208aa-a797-4ee4-990d-7f61479b35b5']) {
                 // return the exit code because we don't care about failures
                 sh script: 'git remote add upstream git@github.com:ciscospark/spark-js-sdk.git', returnStatus: true
                 // Make sure local tags don't include failed releases
@@ -257,9 +260,11 @@ ansiColor('xterm') {
 
           stage('install') {
             image.inside(DOCKER_RUN_OPTS) {
+              // Remove the old symlink that tends to screw up installing the
+              // new package
+              sh 'rm -f ./node_modules/@ciscospark/eslint-config'
               sh 'echo \'//registry.npmjs.org/:_authToken=${NPM_TOKEN}\' > $HOME/.npmrc'
               sh 'npm install'
-              sh 'npm run link-lint-rules'
             }
           }
 
@@ -322,7 +327,7 @@ ansiColor('xterm') {
               image.inside(DOCKER_RUN_OPTS) {
                 echo "checking if tests should be skipped"
                 def action = sh script: 'npm run --silent tooling -- check-testable', returnStdout: true
-                echo "npm run --silent tooling -- check-testable production '${action}'"
+
                 if (action.contains('skip')) {
                   echo "tests should be skipped"
                   skipTests = true
@@ -434,7 +439,7 @@ ansiColor('xterm') {
             if (IS_VALIDATED_MERGE_BUILD && currentBuild.result == 'SUCCESS') {
               stage('publish to github') {
                 // Note: if this stage fails, we should consider the build a failure
-                sshagent(['30363169-a608-4f9b-8ecc-58b7fb87181b']) {
+                sshagent(['707208aa-a797-4ee4-990d-7f61479b35b5']) {
                   sh "git push upstream HEAD:master"
                 }
               }
@@ -470,7 +475,7 @@ ansiColor('xterm') {
                     warn('could not determine tag name to push to github.com')
                   }
                   else {
-                    sshagent(['30363169-a608-4f9b-8ecc-58b7fb87181b']) {
+                    sshagent(['707208aa-a797-4ee4-990d-7f61479b35b5']) {
                       try {
                         sh "git push upstream v${version}:v${version}"
                       }
@@ -496,7 +501,7 @@ ansiColor('xterm') {
                     sh 'npm run publish:docs'
                   }
                   dir('.grunt/grunt-gh-pages/gh-pages/ghc') {
-                    sshagent(['30363169-a608-4f9b-8ecc-58b7fb87181b']) {
+                    sshagent(['707208aa-a797-4ee4-990d-7f61479b35b5']) {
                       try {
                         sh 'git remote add upstream git@github.com:ciscospark/spark-js-sdk.git'
                       }
