@@ -59,6 +59,7 @@
     "lint:eslint": "eslint --ignore-pattern 'packages/node_modules/generator-ciscospark/generators/*/templates/**' --ignore-path .gitignore",
     "lint:eslint:ci-reporter": "bash -c '[[ -n \"${JENKINS}\" ]]' && echo \"-f checkstyle -o reports/style/eslint.xml\" || echo ''",
     "lint:jenkinsfile": "node --eval \"fs.readFileSync('Jenkinsfile').includes('.status') ? console.log('Found \".status\" in Jenkinsfile. You meant \".result\"') && process.exit(1) : process.exit(0)\"",
+    "lint:bash": "npm run shellcheck",
     "lint:js": "npm run --silent lint:eslint -- .",
     "lint:js:ci": "npm run --silent lint:eslint -- $(npm run --silent lint:eslint:ci-reporter) .",
     "lint:package-names": "./tooling/lint-package-names.sh",
@@ -202,6 +203,7 @@
     "response-time": "^2.3.2",
     "rimraf": "^2.6.1",
     "sdp-transform": "^2.4.0",
+    "shellcheck": "0.0.8",
     "sinon": "^4.2.2",
     "string": "^3.3.3",
     "supertest": "^3.0.0",
@@ -257,6 +259,7 @@
   "lint-staged": {
     "*.js": "lint:eslint",
     "Jenkinsfile": "lint:jenkinsfile",
-    "*package.json": "lint:package-names"
+    "*package.json": "lint:package-names",
+	  "*.sh":"lint:bash"
   }
 }
